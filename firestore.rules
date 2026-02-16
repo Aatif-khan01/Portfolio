@@ -1,0 +1,122 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * PORTFOLIO BACKEND SECURITY RULES
+     * 
+     * CORE PHILOSOPHY:
+     * This ruleset implements a Database Access Control (DBAC) model tailored for a high-performance 
+     * professional portfolio. Content management is strictly restricted to authorized administrators, 
+     * while the portfolio content itself is optimized for public consumption.
+     * 
+     * DATA STRUCTURE:
+     * - /adminProfiles/{adminUid}: Marker collection identifying administrative users.
+     * - /userProfiles/main: The primary professional bio and identity information.
+     * - /projects/{projectId}: Portfolio showcase items designed for horizontal scrolling and dynamic loading.
+     * - /researchArticles/{articleId}: Academic and research publications.
+     * - /contactInquiries/{inquiryId}: Visitor messages submitted via the contact form.
+     * 
+     * KEY SECURITY DECISIONS:
+     * 1. DBAC (Database Access Control): Instead of complex nested queries, administrative status is 
+     *    determined by the existence of a document in the '/adminProfiles' collection matching the 
+     *    user's UID. This ensures O(1) authorization checks.
+     * 2. Public Access: Projects, Research, and User Profiles are globally readable to ensure 
+     *    uninterrupted access for recruiters and visitors, even if unauthenticated.
+     * 3. Secure Submissions: Contact inquiries are 'write-only' for the public. Only admins can 
+     *    read or manage incoming messages to protect visitor privacy.
+     * 4. Relational Integrity: On creation, documents are verified to ensure their internal 
+     *    identifiers match their Firestore path.
+     */
+
+    // --- Global Helper Functions ---
+
+    /** @description Checks if the request is from an authenticated user. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Determines if the authenticated user has administrative privileges. */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/adminProfiles/$(request.auth.uid));
+    }
+
+    /** @description Checks if the user is accessing their own document in a specific path. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Verifies a document exists before performing a state-changing operation. */
+    function existsForAdmin() {
+      return isAdmin() && resource != null;
+    }
+
+    // --- Collection Rules ---
+
+    /**
+     * @description Admin markers. Presence of a document here grants global write/management access.
+     * @path /adminProfiles/{adminUid}
+     * @allow get: (get) if the user is checking their own admin status.
+     * @deny write: (create) users cannot self-promote to admin via the client.
+     * @principle DBAC (Database Access Control) marker pattern.
+     */
+    match /adminProfiles/{adminUid} {
+      allow get: if isOwner(adminUid);
+      allow list: if isAdmin();
+      allow create, update, delete: if false; // Admin status must be managed via Admin SDK or Console.
+    }
+
+    /**
+     * @description Public profile information for the portfolio owner.
+     * @path /userProfiles/{profileId}
+     * @allow get, list: (get) anyone visiting the site.
+     * @deny write: (update) unauthorized users attempting to change bio info.
+     * @principle Public read with admin-only restricted writes.
+     */
+    match /userProfiles/{profileId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && request.resource.data.id == profileId;
+      allow update, delete: if existsForAdmin();
+    }
+
+    /**
+     * @description Portfolio projects. Optimized for fast list loading.
+     * @path /projects/{projectId}
+     * @allow get, list: (list) recruiters viewing the horizontal scroll section.
+     * @deny delete: (delete) anyone who is not a verified administrator.
+     * @principle High-performance public access for cinematic loading.
+     */
+    match /projects/{projectId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && request.resource.data.id == projectId;
+      allow update, delete: if existsForAdmin();
+    }
+
+    /**
+     * @description Research publications and articles.
+     * @path /researchArticles/{articleId}
+     * @allow get, list: (get) academic visitors reading abstracts.
+     * @deny update: (update) attempts to modify publication links.
+     * @principle Public research dissemination with administrative control.
+     */
+    match /researchArticles/{articleId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && request.resource.data.id == articleId;
+      allow update, delete: if existsForAdmin();
+    }
+
+    /**
+     * @description Contact form submissions. Publicly writable, privately readable.
+     * @path /contactInquiries/{inquiryId}
+     * @allow create: (create) any visitor submitting the contact form.
+     * @deny list: (list) unauthenticated users trying to scrape visitor messages.
+     * @principle "Drop-box" pattern: Public write, restricted read.
+     */
+    match /contactInquiries/{inquiryId} {
+      allow create: if request.resource.data.id == inquiryId;
+      allow get, list: if isAdmin();
+      allow update, delete: if existsForAdmin();
+    }
+
+  }
+}

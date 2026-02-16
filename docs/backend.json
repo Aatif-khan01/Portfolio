@@ -1,0 +1,280 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents the main profile information of the AI/ML Engineer, displayed across various sections of the portfolio. This entity is designed to hold static content that might become dynamic over time.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity. (This can be a static ID like 'profile' as there's typically only one user profile)."
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the AI/ML Engineer."
+        },
+        "role": {
+          "type": "string",
+          "description": "The primary professional role or title of the engineer."
+        },
+        "focusAreas": {
+          "type": "array",
+          "description": "A list of key areas of expertise and professional focus.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bioSummary": {
+          "type": "string",
+          "description": "A concise summary or introduction about the engineer for the About section."
+        },
+        "bioDetailed": {
+          "type": "string",
+          "description": "A more extensive biography or detailed experience section."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role",
+        "focusAreas",
+        "bioSummary"
+      ]
+    },
+    "Project": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Project",
+      "type": "object",
+      "description": "Represents a single project showcased in the portfolio, including its details, technologies used, and relevant links. This entity is crucial for the dynamic project loading feature.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Project entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the project."
+        },
+        "shortDescription": {
+          "type": "string",
+          "description": "A concise description suitable for an overview, list view, or initial display in the horizontal scroll."
+        },
+        "longDescription": {
+          "type": "string",
+          "description": "A more detailed description of the project, including its goals, challenges, and outcomes. This could be loaded on demand or for a detailed view of the project."
+        },
+        "technologies": {
+          "type": "array",
+          "description": "A list of technologies, frameworks, and tools used in the project.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "thumbnailUrl": {
+          "type": "string",
+          "description": "URL to a representative image or thumbnail for the project's showcase. This should be optimized for quick loading.",
+          "format": "uri"
+        },
+        "liveDemoUrl": {
+          "type": "string",
+          "description": "URL to the live demonstration or deployed version of the project, if available.",
+          "format": "uri"
+        },
+        "githubRepoUrl": {
+          "type": "string",
+          "description": "URL to the project's GitHub repository or source code.",
+          "format": "uri"
+        },
+        "displayOrder": {
+          "type": "number",
+          "description": "A numerical value indicating the preferred display order of the project in the portfolio showcase."
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "description": "A flag indicating if the project should be highlighted or featured prominently."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the project entry was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the project entry was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "shortDescription",
+        "technologies",
+        "thumbnailUrl",
+        "displayOrder",
+        "createdAt"
+      ]
+    },
+    "ResearchArticle": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ResearchArticle",
+      "type": "object",
+      "description": "Represents a research paper, article, or publication authored or co-authored by the AI/ML Engineer.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ResearchArticle entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "The full title of the research paper or article."
+        },
+        "publicationDate": {
+          "type": "string",
+          "description": "The date when the research or article was published.",
+          "format": "date-time"
+        },
+        "abstract": {
+          "type": "string",
+          "description": "A brief summary or abstract of the research article's content."
+        },
+        "authors": {
+          "type": "array",
+          "description": "A list of authors for the research article.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pdfUrl": {
+          "type": "string",
+          "description": "URL to the full PDF version of the research article, if available for download.",
+          "format": "uri"
+        },
+        "externalUrl": {
+          "type": "string",
+          "description": "URL to an external source (e.g., journal page, arXiv) where the research article is hosted.",
+          "format": "uri"
+        },
+        "tags": {
+          "type": "array",
+          "description": "Keywords or categories associated with the research article for filtering or search.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "publicationDate",
+        "abstract"
+      ]
+    },
+    "ContactInquiry": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ContactInquiry",
+      "type": "object",
+      "description": "Represents a message or inquiry submitted by a visitor through the contact form, stored in Firebase Firestore.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ContactInquiry entity."
+        },
+        "senderName": {
+          "type": "string",
+          "description": "The name of the person submitting the inquiry."
+        },
+        "senderEmail": {
+          "type": "string",
+          "description": "The email address of the person submitting the inquiry.",
+          "format": "email"
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject line or topic of the inquiry."
+        },
+        "message": {
+          "type": "string",
+          "description": "The full content of the inquiry message."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "The date and time when the inquiry was submitted.",
+          "format": "date-time"
+        },
+        "isRead": {
+          "type": "boolean",
+          "description": "A flag indicating whether the portfolio owner has marked the inquiry as read."
+        }
+      },
+      "required": [
+        "id",
+        "senderName",
+        "senderEmail",
+        "message",
+        "timestamp"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/adminProfiles/{adminUid}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "This collection serves as the central DBAC mechanism. The existence of a document at this path (where '{adminUid}' is 'request.auth.uid') grants administrative privileges to manage portfolio content. Documents within this collection would typically be minimal, perhaps containing only an 'id' field matching the 'adminUid', acting as a marker for the role."
+        }
+      },
+      {
+        "path": "/userProfiles/main",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "The single, main public profile for the AI/ML Engineer (Aatif Muneeb Khan). This document is publicly readable by all visitors. Only authenticated administrators (identified via the /adminProfiles collection) are permitted to create, update, or delete this document."
+        }
+      },
+      {
+        "path": "/projects/{projectId}",
+        "definition": {
+          "entityName": "Project",
+          "schema": {
+            "$ref": "#/backend/entities/Project"
+          },
+          "description": "A collection containing all projects showcased in the portfolio. All project documents are publicly readable to support the horizontal scrolling project section and dynamic loading. Only authenticated administrators can create, update, or delete project entries. Fields like 'shortDescription' and 'thumbnailUrl' are designed for quick loading in list views."
+        }
+      },
+      {
+        "path": "/researchArticles/{articleId}",
+        "definition": {
+          "entityName": "ResearchArticle",
+          "schema": {
+            "$ref": "#/backend/entities/ResearchArticle"
+          },
+          "description": "A collection of all research papers and articles. All documents are publicly readable to support the 'Research & Writing Section'. Only authenticated administrators can create, update, or delete article entries."
+        }
+      },
+      {
+        "path": "/contactInquiries/{inquiryId}",
+        "definition": {
+          "entityName": "ContactInquiry",
+          "schema": {
+            "$ref": "#/backend/entities/ContactInquiry"
+          },
+          "description": "A collection storing messages submitted through the contact form. Any visitor (authenticated or unauthenticated) can create a new inquiry document. Only authenticated administrators are permitted to read, update (e.g., mark as read), or delete these inquiries."
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed with a strong emphasis on Authorization Independence, Structural Segregation, and efficient querying to support a high-performance, cinematic portfolio website. To address the user's concern about 'why it takes too much time to load projects,' this structure facilitates efficient initial data fetching for project overviews.\n\n1.  **Authorization Independence & DBAC**: A dedicated collection, `/adminProfiles/{adminUid}`, is introduced to manage administrator roles. The presence of a document at `/adminProfiles/$(request.auth.uid)` signifies admin privileges. This completely eliminates the need for `get()` calls to parent documents or within the application data itself for authorization checks, adhering to the 'CRITICAL' Authorization Independence principle. This ensures atomic operations and simplifies security rules, making them highly debuggable.\n\n2.  **Structural Segregation**: Each top-level collection (`/userProfiles`, `/projects`, `/researchArticles`, `/contactInquiries`) is designed with a homogeneous security posture. This simplifies security rules greatly:\n    *   `/userProfiles/main`: Publicly readable for display, admin-only write access.\n    *   `/projects/{projectId}`: Publicly readable for showcase, admin-only write access.\n    *   `/researchArticles/{articleId}`: Publicly readable, admin-only write access.\n    *   `/contactInquiries/{inquiryId}`: Publicly writable by any visitor, admin-only read access.\n\n3.  **QAPs (Query/Access Patterns) & Performance for Projects**: The structure directly supports the required `list` operations without relying on security rules as filters. For example, all documents in `/projects` are publicly readable, allowing the client to fetch all projects efficiently without security rule overhead. To specifically address the concern 'why it takes too much time to load projects', the `Project` entity includes fields like `thumbnailUrl`, `shortDescription`, and `displayOrder`. This allows for highly optimized initial loads of project lists (e.g., for the horizontal scroll section) by querying only these lighter fields and ordering them as needed, and then fetching `longDescription` on-demand for detailed views. This design enables fast, performant 'Dynamic Project Loading' as required, ensuring the site feels responsive and cinematic.\n\n4.  **Access Modeling & Data Clarity**: \n    *   **Private Data**: Admin role information is path-based (`/adminProfiles/{adminUid}`).\n    *   **Collaborative/Global Data**: Top-level collections like `/projects`, `/researchArticles`, and `/contactInquiries` are used for data that is either publicly accessible (read) or submitted by general users (write), with administrative oversight.\n    *   Semantic and descriptive wildcards are used (e.g., `{projectId}`, `{articleId}`, `{inquiryId}`, `{adminUid}`).\n\nThis structure prioritizes security and performance by enabling straightforward Firestore security rules, optimized data retrieval patterns, and clear data ownership."
+  }
+}
