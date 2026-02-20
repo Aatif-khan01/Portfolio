@@ -8,6 +8,7 @@ import SystemThinking from '@/components/SystemThinking';
 import Projects from '@/components/Projects';
 import Insights from '@/components/Insights';
 import Contact from '@/components/Contact';
+import TechStack from '@/components/TechStack';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Home() {
@@ -46,6 +47,7 @@ export default function Home() {
         <Hero />
         <About />
         <SystemThinking />
+        <TechStack />
         <Projects />
         <Insights />
         <Contact />

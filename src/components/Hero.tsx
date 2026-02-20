@@ -90,7 +90,7 @@ const Hero: React.FC = () => {
             >
               <div className="w-8 h-[1px] bg-primary/60" />
               <span className="text-primary font-headline text-[11px] md:text-sm uppercase tracking-[0.8em] whitespace-nowrap">
-                AI / ML Engineer
+                AI / ML Enthusiast
               </span>
             </motion.div>
 

@@ -164,11 +164,11 @@ const Contact: React.FC = () => {
       
       <footer className="mt-32 border-t border-border pt-12 flex flex-col md:flex-row justify-between gap-8 opacity-40">
         <div className="text-[10px] uppercase tracking-[0.3em]">
-          &copy; 2025 AATIF MUNEEB KHAN — CSE & AI ARCHITECTURE
+          &copy; 2026 AATIF MUNEEB KHAN — CSE
         </div>
         <div className="text-[10px] uppercase tracking-[0.3em] flex gap-8">
           <span>SRINAGAR, J&K</span>
-          <span>EST. 2024</span>
+          <span>EST. 2026</span>
         </div>
       </footer>
     </Section>
